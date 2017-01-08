@@ -152,11 +152,18 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
     public boolean add(E key) {
         if (key == null) throw new IllegalArgumentException("first argument to put() is null");
 
-        if(contains(key)) return false;
+        /*if(contains(key)) return false;
         root = put(root, key);
         root.color = BLACK;
         size++;
-        return true;
+        return true;*/
+
+        contAdd=true;
+        root = put(root, key);
+        root.color = BLACK;
+        if(contAdd==true) size++;
+        return contAdd;
+
     }
 
     private Node put(Node h, E key) {
@@ -204,7 +211,7 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
     }
 
 
-
+    private boolean contRemove;
     @Override
     public boolean remove(E key) {
 
@@ -219,12 +226,26 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
         if (!isEmpty()) root.color = BLACK;
         size--;
         return true;
+
+        /*contRemove=false;
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+        root = delete(root, key);
+        if (!isEmpty()) root.color = BLACK;
+        if(contRemove!=false)  {
+            size--;
+        }
+        return contRemove;
+*/
+
         // assert check();
     }
 
     // delete the key-value pair with the given key rooted at h
     private Node delete(Node h, E key) {
         // assert get(h, key) != null;
+        if (h==null) return null;
+        int cmp = key.compareTo(h.key);
 
         if (key.compareTo(h.key) < 0)  {
             if (!isRed(h.left) && !isRed(h.left.left))
@@ -234,14 +255,14 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
         else {
             if (isRed(h.left))
                 h = rotateRight(h);
-            if (key.compareTo(h.key) == 0 && (h.right == null))
+            if (key.compareTo(h.key) == 0 && (h.right == null)) {
                 return null;
+            }
             if (!isRed(h.right) && !isRed(h.right.left))
                 h = moveRedRight(h);
             if (key.compareTo(h.key) == 0) {
                 Node x = min(h.right);
                 h.key = x.key;
-
                 // h.val = get(h.right, min(h.right).key);
                 // h.key = min(h.right).key;
                 h.right = deleteMin(h.right);
