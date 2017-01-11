@@ -216,7 +216,7 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
     public boolean remove(E key) {
 
         if (key == null) throw new IllegalArgumentException("argument to delete() is null");
-        if (!contains(key)) return false;
+        /*if (!contains(key)) return false;
 
         // if both children of root are black, set root to red
         if (!isRed(root.left) && !isRed(root.right))
@@ -225,9 +225,9 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
         root = delete(root, key);
         if (!isEmpty()) root.color = BLACK;
         size--;
-        return true;
+        return true;*/
 
-        /*contRemove=false;
+        contRemove=false;
         if (!isRed(root.left) && !isRed(root.right))
             root.color = RED;
         root = delete(root, key);
@@ -236,7 +236,6 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
             size--;
         }
         return contRemove;
-*/
 
         // assert check();
     }
@@ -251,6 +250,7 @@ public class RedBlackTree<E extends Comparable<E>> implements ISortedSet<E> {
             if (!isRed(h.left) && !isRed(h.left.left))
                 h = moveRedLeft(h);
             h.left = delete(h.left, key);
+
         }
         else {
             if (isRed(h.left))
