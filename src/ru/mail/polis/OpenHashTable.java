@@ -11,7 +11,7 @@ public class OpenHashTable<E extends Comparable<E>> implements ISet<E> {
     private int m;           // size of linear probing table
     //private Key[] keys;      // the keys
     private E[] vals;    // the values
-    private int size;   // number of key-value pairs in the symbol table
+    private int size;   // number of key-value pairs in the table
 
 
     private Comparator<E> comparator;
@@ -77,8 +77,6 @@ public class OpenHashTable<E extends Comparable<E>> implements ISet<E> {
     public boolean add(E value) {
 
         if (value == null) throw new NullPointerException("first argument to put() is null");
-
-
         // double table size if 50% full
         if (size >= m/2) resize(2*m);
 
@@ -99,11 +97,22 @@ public class OpenHashTable<E extends Comparable<E>> implements ISet<E> {
         if (value == null) throw new NullPointerException("argument to delete() is null");
         if (!contains(value)) return false;
 
+
         // find position i of key
         int i = hash(value);
+        /*int check=0;
+        while(vals[i]!=null) {
+            if(value.equals(vals[i])) {
+                vals[i] = null;
+            }
+            i=(i+1)%m;
+            check++;
+            if(check>m) return false;
+        }*/
         while (!value.equals(vals[i])) {
             i = (i + 1) % m;
         }
+
 
         // delete key and associated value
         vals[i] = null;
@@ -111,7 +120,6 @@ public class OpenHashTable<E extends Comparable<E>> implements ISet<E> {
         // rehash all keys in same cluster
         i = (i + 1) % m;
         while (vals[i] != null) {
-            // delete keys[i] an vals[i] and reinsert
             E   valToRehash = vals[i];
             vals[i] = null;
             size--;
